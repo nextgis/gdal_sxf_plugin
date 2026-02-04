@@ -1,91 +1,43 @@
-repos:
-    -   repo: local
-        hooks:
-        -   id: fix-gdal-headers
-            name: Fix GDAL Style Headers
-            entry: python3 scripts/fix_gdal_block_headers.py
-            language: python
-            files: \.(h|cpp|hpp|c)$
+# Pre-commit hooks for OGR SXF driver
+# See https://pre-commit.com for more information
 
-    -   repo: https://github.com/psf/black
-        rev: 22.3.0
+repos:
+    # General file checks
+    -   repo: https://github.com/pre-commit/pre-commit-hooks
+        rev: v4.5.0
         hooks:
-        -   id: black
-            exclude: >
-              (?x)^(
-                swig/python/setup.py.in|
-                swig/python/osgeo/__init__.py|
-                swig/python/osgeo/gdalnumeric.py|
-                doc/source/_extensions/sphinxcontrib_programoutput_gdal.py|
-                autotest/ogr/data/
-              )
-    -   repo: https://github.com/timothycrosley/isort
-        rev: 5.12.0
-        hooks:
-        -   id: isort
-            exclude: >
-              (?x)^(
-                swig/python/setup.py.in|
-                swig/python/osgeo/__init__.py|
-                swig/python/osgeo/gdalnumeric.py|
-                doc/source/_extensions/sphinxcontrib_programoutput_gdal.py|
-                autotest/ogr/data/
-              )
-    -   repo: https://github.com/pycqa/flake8
-        rev: 7.0.0
-        hooks:
-        -   id: flake8
-            exclude: >
-              (?x)^(
-                swig/python/setup.py.in|
-                swig/python/osgeo/__init__.py|
-                swig/python/osgeo/gdalnumeric.py|
-                doc/source/_extensions/sphinxcontrib_programoutput_gdal.py|
-                examples/|
-                autotest/ogr/data/
-              )
+        -   id: trailing-whitespace
+            exclude: \.(md|txt)$
+        -   id: end-of-file-fixer
+            exclude: \.(md|txt)$
+        -   id: check-yaml
+        -   id: check-added-large-files
+            args: ['--maxkb=1000']
+        -   id: check-merge-conflict
+        -   id: check-case-conflict
+        -   id: mixed-line-ending
+            args: ['--fix=lf']
+
+    # C/C++ formatting
     -   repo: https://github.com/pre-commit/mirrors-clang-format
-        rev: 'v15.0.7'
+        rev: 'v18.1.8'
         hooks:
         -   id: clang-format
-            exclude: >
-              (?x)^(
-                autotest/cpp/data/|
-                autotest/gdrivers/data/|
-                swig/|
-                third_party/exprtk/|
-                third_party/fast_float/|
-                third_party/muparser/|
-                third_party/LercLib/|
-                third_party/libdivide/|
-                autotest/ogr/data/|
-                alg/internal_libqhull/|
-                apps/argparse/|
-                frmts/gtiff/libtiff/|
-                frmts/gtiff/libgeotiff/|
-                frmts/hdf4/hdf-eos/|
-                frmts/jpeg/libjpeg/|
-                frmts/jpeg/libjpeg12/|
-                frmts/pcraster/libcsf/|
-                frmts/png/libpng/|
-                frmts/gif/giflib/|
-                frmts/zarr/crc32c.h|
-                frmts/zarr/crc32c.cpp|
-                frmts/zlib/|
-                frmts/pcidsk/sdk|
-                frmts/grib/degrib/degrib|
-                frmts/grib/degrib/g2clib|
-                gcore/sse2neon.h|
-                port/utf8.h|
-                ogr/ogrsf_frmts/adbc/ogr_adbc_internal.h|
-                ogr/ogrsf_frmts/cad/libopencad/|
-                ogr/ogrsf_frmts/geojson/libjson/|
-                ogr/ogrsf_frmts/flatgeobuf/flatbuffers/|
-                ogr/ogrsf_frmts/pmtiles/pmtiles/|
-                ogr/ogrsf_frmts/ods/ods_formula_parser.cpp|
-                ogr/ogrsf_frmts/ods/ods_formula_parser.hpp|
-                ogr/ogrsf_frmts/sqlite/sqlite_rtree_bulk_load|
-                ogr/swq_parser.cpp|
-                ogr/swq_parser.hpp|
-                doc/source/
-              )
+            files: \.(c|cpp|h)$
+            exclude: ^cmake/
+
+    # CMake formatting
+    -   repo: https://github.com/cheshirekow/cmake-format-precommit
+        rev: v0.6.13
+        hooks:
+        -   id: cmake-format
+            files: CMakeLists\.txt$|\.cmake$
+            exclude: ^cmake/borsch/
+
+    # Markdown linting
+    -   repo: https://github.com/pre-commit/mirrors-markdownlint-cli
+        rev: v0.37.0
+        hooks:
+        -   id: markdownlint
+            args: ['--fix']
+            files: \.(md)$
