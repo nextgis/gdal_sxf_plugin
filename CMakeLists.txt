@@ -33,7 +33,7 @@ project(ogr_SXF
 
 set(SXF_VERSION ${PROJECT_VERSION})
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/borsch/cmake/modules")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/borsch/cmake/")
 
 include(FindAnyProject)
 find_anyproject(GDAL REQUIRED)
