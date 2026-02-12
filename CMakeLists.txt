@@ -33,7 +33,9 @@ project(ogr_SXF
 
 set(SXF_VERSION ${PROJECT_VERSION})
 
-include(${CMAKE_CURRENT_LIST_DIR}/cmake/borsch/cmake/version.cmake)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/borsch/cmake/")
+
+include(version)
 report_version(${PROJECT_NAME} ${SXF_VERSION})
 set(SXF_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/Version.txt")
 file(WRITE "${SXF_VERSION_FILE}"
@@ -46,8 +48,6 @@ write_version("${SXF_VERSION_FILE}"
     ${PROJECT_VERSION_MINOR}
     ${PROJECT_VERSION_PATCH}
 )
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/borsch/cmake/")
 
 include(FindAnyProject)
 find_anyproject(GDAL REQUIRED)
@@ -95,7 +95,7 @@ if(NOT DEFINED PACKAGE_VENDOR)
     set(PACKAGE_VENDOR NextGIS)
 endif()
 
-include(${CMAKE_CURRENT_LIST_DIR}/cmake/borsch/cmake/packaging.cmake)
+include(packaging)
 create_borsch_package(${PROJECT_NAME}
     VENDOR ${PACKAGE_VENDOR}
     VERSION ${SXF_VERSION}
